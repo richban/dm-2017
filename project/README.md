@@ -1,5 +1,13 @@
 # Group Project
 
+#### Discuss and file Gitter issues here
+
+
+Join our online chat at [![Gitter](https://badges.gitter.im/gitterHQ/gitter.svg)](https://gitter.im/itu-datamining/project)
+
+* Desktop Client: https://github.com/gitterHQ/desktop
+* Irc Bridge: https://github.com/gitterHQ/irc-bridge
+
 ## Assignment Requirements
 
 #### Technical Tasks
