@@ -492,7 +492,8 @@ Data-mining, preprocessing, KNN classification, K-Means Clustering, Apriori - ma
 
 \section{Data Preprocessing}
 
-\IEEEPARstart{W}{e} 
+\IEEEPARstart{T}{h}e first part of the preprocessing was to getting know the dataset and explore if the data quality satisfy the requirements of the intented use. Firstly I have loaded the dataset and examined the dimensionality and the accuracy, completeness, consistency of the data. The input dataset consisted of 67 rows x 45 colums. After the dataset was identified I have created several methods for data cleaning for filling in missing values, filtering out numbers with regex, convert to float data types, replacing inconsistencies.
+ 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
 
@@ -500,29 +501,73 @@ Data-mining, preprocessing, KNN classification, K-Means Clustering, Apriori - ma
  
 % \hfill September 17, 2014
 
-\subsection{Normalization}
-Firstly,
+\subsection{Dimensionality Reduction}
+After the data was cleaned, I have picked the features that I have decided to used for implementing KNN for classification, K\-Means for Clustering and Apriori \- frequent pattern mining. The subset of features I have used are: \textit{age, shoe\_size, height, language, gender.} Most of the features like \textit{age, shoe\_size, height} are discreate features, I have used descriptive statistics to see the distribution of these features. The other 2 features were nominal \textit{gender} and \textit{language}
+
+\begin{table}[ht]
+%% increase table row spacing, adjust to taste
+% \renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Descriptive Statistic}
+\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{|c||c|c|c|}
+\hline
+& age & shoe\_size & height \\
+\hline
+count & 67 & 67 & 67 \\ 
+\hline
+mean & 40.701493 & 41.537313 & 175.298507 \\
+\hline
+std & 118.907784 & 5.915640 & 25.702856 \\ 
+\hline
+min & 22.000000 & 2.000000 & 34.000000 \\ 
+\hline
+25\% & 24.000000 & 40.750000 & 172.000000 \\ 
+\hline
+50\%  & 25.000000 & 42.500000 & 180.000000  \\
+\hline
+75\%  & 28.000000 & 44.250000 & 186.500000  \\
+\hline
+max  & 999.000000 & 49.000000 & 205.000000  \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Data Transformation}
+Through the use of descriptive statistics, it was clear that the discreate features need to be normalized. Therefore I have used Z-score normalization to ensure that all the features are rescaled and contribute equally, which was crucial in measuring Euclidean distance. 
 
 
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=2.5in]{Feature_Histogram}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-%\caption{Simulation results for the network.}
-% \label{fig_sim}
-% \pageref{fig:mesh1}
-%\end{figure}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=2.5in]{z_score}
+\caption{Z-score Normalization}
+\end{figure}
 
+Alternaly I have also used Min-Max scalling, in this case the data is scaled to a fixed range bettween 0-1.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=2.5in]{minmax_scaling}
+\caption{Min-Max Scalling}
+\end{figure}
+
+In order to implement apriori - frequent pattern mining I had to split the data so that every programming language will be atomic, e.g. in each column is one value.
+
+\begin{lstlisting}
+
+\end{lstlisting}
+[[r, java],
+ [java, css, html],
+ [javascript, java],
+ [java], ... ]
 \section{Clustering}
 
-The question we would like to answer by clustering this nutritional data is “Does food generally have only 1 or 2 nutrients that are above/below average while other levels of nutrients are negligible?” We thought this would be interesting as it is commonplace for people to compare how healthy foods are, and discovering groups of food items (and also identifying the distinguishing features of the group) may be interesting. Our motivation for this comes from our opinion that portrayals of foods in product marketing and public health campaigns often focus on only one or two nutrients (e.g. low in fat, high in protein, high in sugar) rather than the overall picture.
-
-\subsection{Results}
 K-means was chosen as the clustering algorithm due to its scalability to very large datasets like ours. 
 
+\subsection{Results}
 
 
 \section{Classification}
