@@ -120,7 +120,7 @@
 \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
 %Path in Unix-like (Linux, OsX) format
-\graphicspath{ {/Users/richardbanyi/Downloads/IEEEtran/img/}}
+\graphicspath{ {img/}}
   % and their extensions so you won't have to specify these with
 \includegraphics
 \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
@@ -393,7 +393,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Data Mining ITU 2017 Spring - Group Project}
+\title{Data Mining ITU 2017 Spring - Individual Assignment}
 %
 %
 % author names and IEEE memberships
@@ -405,12 +405,11 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Tom~Roberts,~\IEEEmembership{Student,~ITU,}
-        Richard~Banyi,~\IEEEmembership{Student,~ITU}% <-this % stops a space
+\author{Richard~Banyi,~\IEEEmembership{Student,~ITU}% <-this % stops a space
 \thanks{P.  González de Prado Salas is with the Department
 of Advanced Programming, IT University of Copenhagen, Denmark}% <-this % stops a space
 \thanks{S. Risi Head of Data Mining Cource, IT University of Copenhagen.}% <-this % stops a space
-\thanks{Manuscript received May 20, 2017}}
+\thanks{Manuscript received May 26, 2017}}
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -433,8 +432,8 @@ of Advanced Programming, IT University of Copenhagen, Denmark}% <-this % stops a
 
 
 % The paper headers
-\markboth{Journal of Data Mining Group Project, No.~1, May~2017}%
-{Shell \MakeLowercase{\textit{et al.}}: Data Mining ITU 2017 Spring - Group Project}
+\markboth{Report of Data Mining Individual Assignment, No.~1, May~2017}%
+{Shell \MakeLowercase{\textit{et al.}}: Data Mining ITU 2017 Spring - Individual Assignment}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -471,7 +470,7 @@ of Advanced Programming, IT University of Copenhagen, Denmark}% <-this % stops a
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Data-mining, machine learning, group project.
+Data-mining, preprocessing, KNN classification, K-Means Clustering, Apriori - market basket analysis.
 \end{IEEEkeywords}
 
 
@@ -492,22 +491,8 @@ Data-mining, machine learning, group project.
 
 
 \section{Data Preprocessing}
-% The very first letter is a 2 line initial drop letter followed
-% by the rest of the first word in caps.
-% 
-% form to use if the first word consists of a single letter:
-% \IEEEPARstart{A}{demo} file is ....
-% 
-% form to use if you need the single drop letter followed by
-% normal text (unknown if ever used by IEEE):
-% \IEEEPARstart{A}{}demo file is ....
-% 
-% Some journals put the first two words in caps:
-% \IEEEPARstart{T}{his demo} file is ....
-% 
-% Here we have the typical use of a "T" for an initial drop letter
-% and "HIS" in caps to complete the first word.
-\IEEEPARstart{W}{e} found that this dataset is quite noisy and error-prone. As a result, cleaning it so it could be data mined took a significant amount of time. This could be due to the fact that it is an open database that can be updated by any volunteer from around the world. The noise mainly manifested as missing data, but also as inconsistent data recordings (for example, negative values). We had a choice between a kaggle dataset which is subset of the full data, and the full data itself from the source website. We chose to use the (much larger) full dataset from the source as we felt that having as much data as possible could make our supervised learning algorithms more accurate and potentially find stronger patterns in our clustering.
+
+\IEEEPARstart{W}{e} 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
 
@@ -515,237 +500,61 @@ Data-mining, machine learning, group project.
  
 % \hfill September 17, 2014
 
-\subsection{Dimensionality Reduction}
-Firstly, these are many (mostly nominal) features, such as the countries the food item is sold in, which product brand it belongs to, the ID of the user who first uploaded it etc in the data. Most of these are irrelevant to our questions and could in fact interfere with the classifier. Using knowledge of the domain, we removed all of these features leaving only those relating to the nutritional content of the food. Doing so reduced the dataset from 146 features to 89; 88 macronutrients and micronutrients, and 1 nominal label of the food’s nutritional grade.
+\subsection{Normalization}
+Firstly,
 
 
-Through the use of descriptive statistics, it was clear that certain features (namely the micronutrients) are very sparsely populated. We generated a \textbf{ histogram of the nutritional content features} to visualise this. At the bottom end of the scale, there were several micronutrients with only 1 or 2 observations in total. Clearly, attempting to insert missing values for these features would introduce too much bias. We sorted the features by descending frequency; the \textbf{bar chart} shows those with the most observations. Although all of these are candidates to be kept in the data, there appears to be a clear drop in the number of observations between vitamin-a\textunderscore 100g $($137,570$)$ and potassium\textunderscore 100g $($24,754$)$. Based on this, it was decided that any features with greater than or equal to the number of observations as vitamin-a\textunderscore100g would be kept, and all other nutrient features discarded. This further reduced the number of features from 89 to 16.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{Feature_Histogram}
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=2.5in]{Feature_Histogram}
 % where an .eps filename suffix will be assumed under latex, 
 % and a .pdf suffix will be assumed for pdflatex; or what has been declared
 %\DeclareGraphicsExtensions
-\caption{Simulation results for the network.}
+%\caption{Simulation results for the network.}
 % \label{fig_sim}
 % \pageref{fig:mesh1}
-\end{figure}
-
-
-\subsection{Data Transformation}
-The next step was to handle missing data. It was found that of the 3,984,285 individual observations, 915,995 are missing values $($~23\%$)$. Clearly this requires cleaning before it is possible to run any analysis on the data. We considered the basic strategy of removing entire data points with a high percentage of missing values, but due to the sparsity of many rows and columns, this reduced the dataset down to a fraction of the original size. We instead opted to impute missing values using the sklearn Imputer library. We experimented with inserting the mean, median, and mode to compare how it affected the results.
-
-Before running our chosen algorithms, we wanted to visualise the data to understand its general shape. As the data contains 15 continuous features, we used Principal Component Analysis (PCA) to eliminate dimensions to be able to plot the data. PCA emphasises correlations in the data so that when reducing the dimensions, the first principal component has the highest possible variance. It transforms the data so that it can plot every point on a new coordinate system. The new set of axes don’t have any physical meaning as they are simply combinations of dimensions that give one axis lots of variation. The result of using PCA to reduce to our dataset to 2 dimensions is shown below - first by imputing with the median, secondly with the mode, and finally with the mean.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{imputed_median}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Imputed Median}
-% \label{fig_sim}
-% \pageref{fig:mesh1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{imputed_mode}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Imputed Mode}
-% \label{fig_sim}
-% \pageref{fig:mesh1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{imputed_mean}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Imputed Mean}
-% \label{fig_sim}
-% \pageref{fig:mesh1}
-\end{figure}
-
-Visual inspection shows that there are clear differences in how the imputation affects the shape of the data. All of these relatively simple imputation strategies add bias in different ways. With a dataset containing so many missing values, we were concerned that just inserting the same value many times might create false positives in terms of clusters (which by definition are groups of similar data). To this end, we suspect that the large cluster seen in the median plot appears because imputing missing values with the median inserts the ‘middle’ value of a feature, and so this created a strong central cluster that essentially represents all of the missing values. The mode plot shows signs of clustering but again we were concerned that these clusters could be the groups of imputed values. Inserting the mean seems to make more sense as we are handing continuous values. Ideally, we would have liked to use more advanced imputation methods such as model-based imputation which creates a classifier for each feature and tries to intelligently predict a missing value based on other features. However, this proved difficult to find a library in Python that can do this and so we proceeded using the mean due to time constraints on the project.
-
-Descriptive statistics on the imputed data showed that the scales of each feature varied greatly. It is common that machine learning algorithms require the data to have a relatively normal distribution of data. Therefore, features are often scaled so that they are centred around 0 and have roughly the same amount of variance. The variance of some of the features was quite high due to outliers so we used the sklearn RobustScaler library to do this. This library can scale features using statistics that are robust to outliers, such as scaling according to the Interquartile Range. However, after scaling, the ranges of the features still varied greatly. To address this, the scaled data was then normalised to have unit form using the sklearn Normalizer library. The values now sat on a range between approximately -1 and 1.
+%\end{figure}
 
 
 \section{Clustering}
 
 The question we would like to answer by clustering this nutritional data is “Does food generally have only 1 or 2 nutrients that are above/below average while other levels of nutrients are negligible?” We thought this would be interesting as it is commonplace for people to compare how healthy foods are, and discovering groups of food items (and also identifying the distinguishing features of the group) may be interesting. Our motivation for this comes from our opinion that portrayals of foods in product marketing and public health campaigns often focus on only one or two nutrients (e.g. low in fat, high in protein, high in sugar) rather than the overall picture.
 
-\subsection{Algorithm}
-K-means was chosen as the clustering algorithm due to its scalability to very large datasets like ours. It also performs well compared to other clustering algorithms when using low values of k, which in our case is our intention as we attempt to cluster foods into broad nutritional groups.
-
-K-means has two steps which it cycles between until reaching a point where continuing this cycle is adding little benefit to the quality of the model (i.e. it converges). Firstly, it measures the distance from each data point to every ‘centroid’ (the centre of a cluster representing a class label), and assigning the label of the closest centroid to the data point. Secondly, it calculates the average of all data points assigned to a cluster to produce the new centroid for that cluster. The algorithm converges when the distance the centroids ‘move’ between cycles is below a given threshold.
-
-An important parameter for the k-means algorithm is the value of k, but it can be difficult to work out and some experimentation is required. The quality of a cluster can be measured by calculating the sum of the squared distances between every data point in the cluster and the cluster centroid, also known as the ‘inertia’ of the cluster (where lower inertia is in theory better than high inertia). We used the Elbow Method heuristic which involves running k-means on a range of values of k and calculating the inertia produced for each. The inertia is plotted against the value of k on a line chart to look for an ‘elbow’ or cornerpoint in the line. The heuristic suggests that the elbow usually represents where we start to have diminishing returns by increasing k. However, this nutritional data produces a relatively smooth curve (see line chart)\ref{fig:inertia_vs_k}. This highlights a limitation of the k-means algorithm which is that it assumes that the clusters are generally separate, convex, and of similar size. Data which does not cluster according to these assumptions can give poorer results. This somewhat correlates to the visual inspection of the data during pre-processing that while there does appear to be higher densities of data which could represent clusters, there are no clearly separate, strongly clustered areas of data that k-means expects.
+\subsection{Results}
+K-means was chosen as the clustering algorithm due to its scalability to very large datasets like ours. 
 
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{inertia}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Inertia vs Value of k}
-\label{fig:inertia_vs_k}
-% \pageref{fig:mesh1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{inertia_change}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Change in Inertia between k-1 and k}
-\label{fig:inertia_change}
-% \pageref{fig:mesh1}
-\end{figure}
-
-Due to the ambiguity of finding an elbow point in the first line chart, we further plotted the rate of change of inertia as k increases $($see second line chart$)$\ref{fig:inertia_change} that shows some clearer candidates for an elbow point. The key thing we were looking for is the point where increasing k has diminishing changes in inertia. The third line chart\ref{fig:inertia_diff} below shows the rate of change of inertia and it appears that increasing from k = 8 to k = 9 is the first instance where this happens. Thereafter, the inertia fluctuates up and down by roughly the same amount. Although we didn’t make an exhaustive search of values of k $($only 1 to 30$)$, we want to have a small value for k, and so concluded that a good approximation for this dataset is 8.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{inertia_change_change}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Difference in Change in Inertia between k-1 and k}
-\label{fig:inertia_diff}
-\end{figure}
-
-We explored other options for approximating k. The sklearn toolkit offers methods to work out the average silhouette score of a k-means model. This score calculates how similar a data point is to other data points in its cluster, and data points in other clusters - the assumption being that it should be close to the former and far from the latter. However, this operation has to compute pairwise distances and so scales very poorly. When we attempted to calculate the silhouette score for one value of k, the dataset was so large that it caused a Python memory error before it could terminate.
-
-\section{Results}
-
-The scatter plot\ref{fig:scatter_plot} below shows the PCA-reduced data plotted with the cluster centres as white crosses, and areas of colour highlighting the boundaries of the clusters. It can be seen that there is a central cluster which represents food items that don’t have particularly large or small amounts of any nutrient. The remaining clusters around the edges show food which have amounts of nutrients more towards the minimum and maximum values. Again, the axes generated by PCA don’t represent anything real but highlight the variance in the data which is useful for preliminary visual inspection of the k-means results.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{mean_8_clusters}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{K-mean Clustering}
-\label{fig:scatter_plot}
-\end{figure}
-
-\subsection{Clusters}
-
-The centroids generated are:
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{centroids_mean_8_clusters}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-%\DeclareGraphicsExtensions
-\caption{Cluster Centroids}
-\label{fig:centroids_mean_8_clusters}
-\end{figure}
-
-We have used colour for readability: green represents the maximum value of the feature, red is the minimum, and yellow is the mean. Values are then mapped on a colour gradient between these bounds to indicate where they lie. This colouring shows that the majority of clusters’ features are mostly yellow or orange/yellow, suggesting that most have an average amount of most nutrients. However, some clusters stand out.
-
-Cluster 7 has below-average amounts of many nutrients, both those considered healthy and those considered unhealthy. You could infer that this is the central cluster and foods in this cluster are not particularly nutritious but also not particularly unhealthy. Cluster 5 represents foods that are high in cholesterol and trans-fat, two nutrients regarded as unhealthy. Cluster 1 represents foods that are high in energy and protein but contain a lot of salt. Foods in this group might appear to be healthy due to their high energy and protein content, but this may be offset by the high salt content.
-
-While it is interesting to debate about how nutritious food available on the market is based on the centroids, one notable observation relates to our question regarding how food is often considered in terms of only 1 or 2 nutrients. There are very few clusters that have 1 standout feature (whether it’s large or small amounts of a nutrient). Most have a mix of high and low levels of nutrients (green and red in the colour scale, respectively). This could implying that generally while a food may be perceived as healthy by having lots of a ‘good’ nutrient (protein, fiber, vitamins etc), it is often balanced out by nutrients deemed ‘bad’ (salt, sodium, cholesterol etc).
-
-We feel that the societal impact of these results is that it highlights how marketing campaigns may choose to highlight only the beneficial aspects of their food products (naturally) but people must be aware that many foods must be viewed as a whole to truly understand how nutritious it is.
 
 \section{Classification}
 
-The UK Food Standards Administration has classified how nutritious a food is on a scale of A - E. Their formula was adapted to calculate the grade for food items in the Open Food Facts database using the method outlined in . This formula takes into account the amount of nutrients deemed ‘bad’, the amount deemed ‘good’, and some exceptions to these rules - for example, there are separate grading rules for fruit, cheese, nuts, and vegetables. Our main goal was to include more features and use supervised learning to learn the grading system to classify new products. We thought it can be used to validate formulas of other Food \& Health organizations or food manufacturers could use it to classify their new products as part of their R\&D process
-
-
-\subsection{Explanation of Walktrough}
-
-Supervised learning is the most popular subfield in machine learning. We decided to use backpropagation algorithm for multi-layer perceptron from the field of Artificial Neural Networks. The principle of the backpropagation is that it learns a function training on a dataset by modifying internal weights of input signals to produce and expected output signal. To put it simply, the backpropagation is a method for training weights in a multi-layer neural network, the weights are modified as to minimize the error between the network’s prediction and the actual target value. We had to define the structure of the neural network. In our case the algorithm was fed with 15 features (variables) as one input layer, and 5 output variables which are the labels (classification) also one layer, and different combination of neurons and hidden layers.
-
-\subsection{Algorithm}
-
-Before investigating learning algorithms, we calculated the minimum performance expected by a classifier using the 0-R method. This is a classification method that simply predicts the most frequent label for every prediction. In our data, there are 5 unique labels \{A, B, C, D, E\}. With 224235 labeled data points, D is the most frequent label $($63638$)$, giving a 0-R accuracy of 23.38\%.
-
-As part of the experimentation we started with the simplest neural network, a single-layer perceptron. The perceptron is a linear classifier and as we have found out during the preprocessing our dataset is not linearly separable by a hyperplane, therefore a single-layer perceptron has never got to a state where it could classify all of the input vectors correctly, but instead the learning process completely failed.
-
-Thus we decided to use far more complicated neural network - a multi-layer perceptron. The main advantage of using a MLP was that it had the capability to learn non-linear models. One drawback of MLP is that it required tuning, we had to tune number of different hyperparameters such as the number of hidden neurons, layers and iterations.
-
-We assumed that our data does require separation by a nonlinear technique, so we started with one hidden layer and 5 neurons and 200 iterations by default. We have split the dataset  into 70\% training data and 30\% test data.  We have fit the model with that training data set and afterwards we evaluated our model with the test data.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{training_data}
-\caption{Data Set X}
-\label{fig:data_set_x}
-\end{figure}
-
-We have obtained the following accuracy score after the model validation on the test data.
-
-Training set score: 0.779433
-Test set score: 0.7632451
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{confusion_matrix}
-\caption{Confusion Matrix}
-\label{fig:confusion_matrix}
-\end{figure}
-
-Not too bad! Once we have obtained the first results of our model, we decided to experiment with the hyperparameters of the MLP to obtain a new NN architecture.
-
-Creating a new NN architecture meant coming up with values for the number of hidden layers and the number of nodes in each of these layers. The number of neurons on the first layer (input layer) was easy to decide, as this parameter is completely and uniquely determined by the number of features - 15 features.  The number of neurons on the output layer was also straightforward. Our MLP classifier supports multi-class classification by applying Softmax as the output function, which in our case meant one node per class label in our model, therefore 5 neurons. The most challenging parameter to decide was the number of hidden layers and neurons in each layer. One issue with the number of hidden layers layers was the performance difference from adding additional hidden layers. Adding more hidden layers $($2nd, 3rd, etc.$)$ lead to little improvements. Thus 1 hidden layer was sufficient in our case. For the number of neurons in that layer we took the mean of the input and the output layers.
+The scatter plot...
 
 \subsection{Results}
 
-Although we have tried different parameters, the best results we have achieved with the following parameters:
-
-\begin{lstlisting}
-X_train.shape(158412, 15)
-X_test.shape -  (67892, 15)
-\end{lstlisting}
-
-\begin{lstlisting}
-MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(15, 15, 15), learning_rate='constant',
-       learning_rate_init=0.001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
-       solver='lbfgs', tol=0.0001, validation_fraction=0.1, verbose=False,
-       warm_start=False)
-\end{lstlisting}
+The centroids generated are:
 
 
-ACCURACY SCORE
+\section{Apriori}
 
-Training set score: 0.858193
-Test set score: 0.857700
+Apriori
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{test_2_PCA}
-\caption{Decision Boundaries with PCA}
-\label{fig:decision_boundaries}
-\end{figure}
 
-Even though we’ve obtained pretty good accuracy score, accuracy is not a reliable metric for the real performance of a classifier, because it could yield misleading results if the data set is unbalanced. However in our case, our data set did not have this problem. We have displayed a confusion matrix which allowed us more detailed analysis than mere proportion of the accuracy.
+\subsection{Results}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{cnf_matrix_mlp}
-\caption{Confusion Matrix}
-\label{fig:cnf_matrix_mlp}
-\end{figure}
+Supervised...
 
-CLASSIFICATION REPORT
 
-We measured not just the class distributions, but also a more abstract measures like precision, recall, of f1 score (harmonic mean of precision and sensitivity).
+
+%\begin{lstlisting}
+%MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto', beta_1=0.9,
+%       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+%       hidden_layer_sizes=(15, 15, 15), learning_rate='constant',
+%       learning_rate_init=0.001, max_iter=10000, momentum=0.9,
+%       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
+%       solver='lbfgs', tol=0.0001, validation_fraction=0.1, verbose=False,
+%       warm_start=False)
+%\end{lstlisting}
+
 
 \begin{table}[ht]
 %% increase table row spacing, adjust to taste
@@ -776,251 +585,6 @@ avg / total & 0.86 & 0.86 & 0.86 & 67893 \\
 \end{tabular}
 \end{table}
 
-Different Hyperparameters
-
-\begin{lstlisting}
-MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto', beta_1=0.9,
-       beta_2=0.999, early_stopping=False, epsilon=1e-08,
-       hidden_layer_sizes=(10, 10), learning_rate='constant',
-       learning_rate_init=0.001, max_iter=10000, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
-       solver='lbfgs', tol=0.0001, validation_fraction=0.1, verbose=False,
-       warm_start=False)
-\end{lstlisting}
-
-Training set score: 0.827494 Test set score: 0.823411
-
-\begin{table}[ht]
-%% increase table row spacing, adjust to taste
-% \renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-\caption{Classification Report}
-\label{Classification Report}
-\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-\begin{tabular}{|c||c|c|c|c|}
-\hline
-& precision & recall & f1-score & support \\
-\hline
-a & 0.88 & 0.88 & 0.88 & 10888 \\ 
-\hline
-b & 0.74 & 0.77 & 0.75 & 10383 \\
-\hline
-c & 0.80 & 0.76 & 0.78 & 13947 \\ 
-\hline
-d & 0.83 & 0.86 & 0.84 & 19282 \\ 
-\hline
-e & 0.88 & 0.84 & 0.86 & 13392 \\ 
-\hline
-avg / total & 0.82 & 0.82 & 0.82 & 67892 \\
-\hline
-\end{tabular}
-\end{table}
-
-CROSS-VALIDATION
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{N9HZktu}
-\caption{Cross-validation}
-\label{fig:crossvalidation}
-\end{figure}
-
-In order to give confidence in our results, we have tried cross-validation - splitting the original dataset into more than one part. A model is trained using k - 1 of the folds as training data and the resulting model is validated on the remaining part of the data. The performance measure (accuracy) is reported by k-fold cross-validation is then the average of the values in the loop. However this validation was really exhausted as we have limited resources and took a really long time given the size of our dataset. On the other hand we have managed to obtain accuracy = 0.78 with k = 10 folds with the following parameters
-
-\begin{lstlisting}
-kwargs = { "solver":'lbfgs', "alpha": 1e-5, "hidden_layer_sizes": (10,),
-"random_state": 1, "max_iter": 10000}
-
-k= 10
-\end{lstlisting}
-
-Multi-layer Perceptron (MLP) Classifier: 0.78
-
-
-\begin{table}[ht]
-%% increase table row spacing, adjust to taste
-% \renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-\caption{Classification Report}
-\label{Classification Report}
-\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-\begin{tabular}{|c||c|c|c|c|}
-\hline
-& precision & recall & f1-score & support \\
-\hline
-a & 0.84 & 0.83 & 0.84 & 36353 \\ 
-\hline
-b & 0.68 & 0.72 & 0.70 & 34982 \\
-\hline
-c & 0.74 & 0.71 & 0.73 & 46639 \\ 
-\hline
-d & 0.78 & 0.82 & 0.80 & 64206 \\ 
-\hline
-e & 0.86 & 0.80 & 0.83 & 44124 \\ 
-\hline
-avg / total & 0.78 & 0.78 & 0.78 & 226304 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=2.5in]{conf_matrix_cross}
-\caption{Confusion Matrix Cross-validation}
-\label{fig:cnf_crossvalidation}
-\end{figure}
-
-\section{Implications}
-
-It is common in data mining that the objective is to reduce a large, complex set of data down to chunks of information that can be interpreted more easily. We think that the societal benefit of this classifier is that it provides a way for anyone, whether it’s a food manufacturer or a consumer, to reduce the often confusing set of nutritional values to a set of 5 easily-digestible grades. Particularly in the consumer’s case, this could be invaluable as a tool whilst shopping if they can pick up a food product, get the nutritional information on the label (ideally without having to laboriously enter them one-by-one, but that is out of scope of this project), and immediately be given an approximation of how healthy it is. This could greatly influence their purchasing decision. From the other perspective, this could drive food manufacturers to create healthier food, or at least be more transparent in what their food contains, if consumers now have access to tools which can summarise it.
-
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-% \subsubsection{Subsubsection Heading Here}
-% Subsubsection text here.
-
-
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
-
-
-
-
-%\section{Conclusion}
-%The conclusion goes here.
-
-
-
-
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-%\appendices
-%\section{Proof of the First Zonklar Equation}
-%Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-%\section{}
-%Appendix two text goes here.
-
-
-% use section* for acknowledgment
-\section*{Acknowledgment}
-
-
-We would like to express a gratitude to our supervisor P. González de Prado Salas for his time and supportive approach. Especially we would like to thank S. Risi who lead us trought the course and lastly special thank you for all the TA's.
 
 
 % Can use something like this to put references on a page
@@ -1030,29 +594,6 @@ We would like to express a gratitude to our supervisor P. González de Prado Sal
 \fi
 
 
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
 
  
@@ -1077,47 +618,6 @@ Machine Learning Mastery,
 
 
 \end{thebibliography}
-
-% biography section
-% 
-% If you have an EPS/PDF photo (graphicx package needed) extra braces are
-% needed around the contents of the optional argument to biography to prevent
-% the LaTeX parser from getting confused when it sees the complicated
-% \includegraphics command within an optional argument. (You could create
-% your own custom macro containing the \includegraphics command to make things
-% simpler here.)
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
-% or if you just want to reserve a space for a photo:
-
-%\begin{IEEEbiography}{Michael Shell}
-%Biography text here.
-%\end{IEEEbiography}
-
-% if you will not have a photo at all:
-%\begin{IEEEbiographynophoto}{John Doe}
-%Biography text here.
-%\end{IEEEbiographynophoto}
-
-% insert where needed to balance the two columns on the last page with
-% biographies
-%\newpage
-
-%\begin{IEEEbiographynophoto}{Jane Doe}
-%Biography text here.
-%\end{IEEEbiographynophoto}
-
-% You can push biographies down or up by placing
-% a \vfill before or after them. The appropriate
-% use of \vfill depends on what kind of text is
-% on the last page and whether or not the columns
-% are being equalized.
-
-%\vfill
-
-% Can be used to pull up biographies so that the bottom of the last one
-% is flush with the other column.
-%\enlargethispage{-5in}
-
 
 
 % that's all folks
