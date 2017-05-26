@@ -557,16 +557,18 @@ Alternaly I have also used Min-Max scalling, in this case the data is scaled to 
 In order to implement apriori - frequent pattern mining I had to split the data so that every programming language will be atomic, e.g. in each column is one value.
 
 \begin{lstlisting}
-
-\end{lstlisting}
 [[r, java],
  [java, css, html],
  [javascript, java],
  [java], ... ]
+\end{lstlisting}
+
 \section{Clustering}
 
-I have chosen K-means as the clustering algorithm. My goal was to find out the clusters on discreate features \textit{age, height and shoze size}. The algorithm first select random k objects (vectors) from the dataset as initial clusters centers. Than for each object (vector) from the dataset the Euclidean distance is computed between that object and the cluster centroids and it's assigned to the cluster which is the most similiar (shortest distance). Afterwards each cluster centers are recomputed and all the objects are then reassigned using the updated cluster centers. And the iteration continues until the centroids stabilize. The algorithm calculate how much the centroids moved in each iteration and compare from the previousone.
+I have chosen K-means as the clustering algorithm. My goal was to find out the clusters on discreate features \textit{age, height and shoe size}. The algorithm first select random k objects (vectors) from the dataset as initial clusters centers. Than for each object (vector) from the dataset the Euclidean distance is computed between that object and the cluster centroids and it's assigned to the cluster which is the most similiar (shortest distance). Afterwards each cluster centers are recomputed and all the objects are then reassigned using the updated cluster centers. And the iteration continues until the centroids stabilize. The algorithm calculate how much the centroids moved in each iteration and compare from the previousone.
 \subsection{Results}
+
+The graph below shows the data points and the cluster center points marked as X in 3 dimensional space. In order to choose the appropriate K I have measured the cluster quality by \textit{within-cluster variaton}, e.g. sum of squared error.
 
 \begin{figure}[ht]
 \centering
@@ -577,23 +579,70 @@ I have chosen K-means as the clustering algorithm. My goal was to find out the c
 
 \section{Classification}
 
-The scatter plot...
+For the supervised learning I have choosed to implement K\-Nearest Neighbours. Again I have used the same dataset as for the the clustering, therefore the question I have tried to find answer is \textit{What is the person's gender based on their age, heigh and shoe size}.
 
 \subsection{Results}
 
-The centroids generated are:
+I have used a standart ratio of spliting the data (2/3 for training and 1/3 for testing). I have gained accuracy mostly around 80\% \- 90\% correct predicted class for the gender. I suppose this high accuracy is the result that the dataset is unbalanced. There is total of 55 males and 9 females classifiers. The line chart below shows how the accuracy differ when I have increased k for the following spliting: Train:43 and Test: 20.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=2.5in]{classification}
+\caption{Classification}
+\end{figure}
+
+Also the accuracy greatly varied accross different distribution of training and testing. The chart below shows different accuracy obtained for different split of data (train&test) and k = 5.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=2.5in]{diff_split}
+\caption{KNN Classificatio with different split}
+\end{figure}
 
 \section{Apriori}
 
-Apriori
-
+Lastly, for the frequent pattern mining I have used Apriori Algorithm in order to found out which programming languages are most likely group togther within ITU students. \textit{What itemset of programming languages do itu students know?}. 
 
 \subsection{Results}
 
-Supervised...
+The implementation consists of 2 parts, first I have found the all the frequent itemsets which meet the minimum support level \textit{min\_sup=0.2}.
 
-
+\begin{lstlisting}
+[[({'c#'}),
+  ({'c'}),
+  ({'python'}),
+  ({'javascript'}),
+  ({'java'}),
+  ({'f#'}),
+  ({'c++'})],
+ [({'c', 'java'}),
+  ({'c#', 'java'}),
+  ({'c++', 'java'}),
+  ({'c#', 'python'}),
+  ({'f#', 'java'}),
+  ({'c#', 'c++'}),
+  ({'java', 'javascript'}),
+  ({'java', 'python'}),
+  ({'c#', 'javascript'})],
+ [({'c#', 'java', 'javascript'}),
+  ({'c#', 'c++', 'java'}),
+  ({'c#', 'java', 'python'})]
+\end{lstlisting}
+ 
+ Then I have generated strong assocation rules from that frequent itemset which satisfied the minimum support and minimum confidence \textit{min\_conf=0.7}.
+ 
+ \begin{lstlisting}
+[(({'c'}), ({'java'}), 1.0),
+ (({'c#'}), ({'java'}), 0.9655172413793103),
+ (({'c++'}), ({'java'}), 0.95),
+ (({'f#'}), ({'java'}), 1.0),
+ (({'c++'}), ({'c#'}), 0.9000000000000001),
+ (({'javascript'}), ({'java'}), 0.95),
+ (({'python'}), ({'java'}), 0.9047619047619047),
+ (({'c++'}), ({'c#', 'java'}), 0.8500000000000001)]
+ \end{lstlisting}
+ 
+The rules above show up in at least 20\% off all the \"transactions\". Therefore 90\% of students who knows python also knows java programming language.
 
 %\begin{lstlisting}
 %MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto', beta_1=0.9,
