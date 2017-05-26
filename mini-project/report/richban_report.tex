@@ -470,7 +470,7 @@ of Advanced Programming, IT University of Copenhagen, Denmark}% <-this % stops a
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Data-mining, preprocessing, KNN classification, K-Means Clustering, Apriori - market basket analysis.
+Data-mining, preprocessing, KNN classification, K-Means Clustering, Apriori - frequent pattern mining.
 \end{IEEEkeywords}
 
 
@@ -565,10 +565,16 @@ In order to implement apriori - frequent pattern mining I had to split the data 
 
 \section{Clustering}
 
-I have chosen K-means as the clustering algorithm. My goal was to find out the clusters on discreate features \textit{age, height and shoe size}. The algorithm first select random k objects (vectors) from the dataset as initial clusters centers. Than for each object (vector) from the dataset the Euclidean distance is computed between that object and the cluster centroids and it's assigned to the cluster which is the most similiar (shortest distance). Afterwards each cluster centers are recomputed and all the objects are then reassigned using the updated cluster centers. And the iteration continues until the centroids stabilize. The algorithm calculate how much the centroids moved in each iteration and compare from the previousone.
+I have chosen K-means as the clustering algorithm. My goal was to find out the clusters on discreate features \textit{age, height and shoe size}. The algorithm first select random k objects (vectors) from the dataset as initial clusters centers. Than for each object (vector) from the dataset the Euclidean distance is computed between that object and the cluster centroids and it's assigned to the cluster which is the most similiar (shortest distance). Afterwards each cluster centers are recomputed and all the objects are then reassigned using the updated cluster centers. And the iteration continues until the centroids stabilize. The algorithm calculate how much the centroids moved in each iteration and compare from the previous.
 \subsection{Results}
 
-The graph below shows the data points and the cluster center points marked as X in 3 dimensional space. In order to choose the appropriate K I have measured the cluster quality by \textit{within-cluster variaton}, e.g. sum of squared error.
+The graph below shows the data points and the cluster center points marked as X in 3 dimensional space. In order to choose the appropriate K I have measured the cluster quality by the method called \textit{within-cluster variaton}, e.g. sum of squared error. I've computed the summed squared distances for each cluster, which is the inertia and took the average of all the clusters. As the chart below shows, as I have increased K the inertia  went down - the lower intertia is the data points are closer to the centre points, therefore more clusters means data points get represented better. In conclusion, the best value for K was the point where by increased K it didn't reduce the inertia much more, therefore \textit{k=5}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=2.5in]{cluster_variance}
+\caption{Average within-cluster variation}
+\end{figure}
 
 \begin{figure}[ht]
 \centering
@@ -579,11 +585,11 @@ The graph below shows the data points and the cluster center points marked as X 
 
 \section{Classification}
 
-For the supervised learning I have choosed to implement K\-Nearest Neighbours. Again I have used the same dataset as for the the clustering, therefore the question I have tried to find answer is \textit{What is the person's gender based on their age, heigh and shoe size}.
+For the supervised learning I have choosed to implement K-Nearest Neighbours. Again I have used the same dataset as for the the clustering, therefore the question I have tried to find answer is \textit{What is the person's gender based on their age, heigh and shoe size?}
 
 \subsection{Results}
 
-I have used a standart ratio of spliting the data (2/3 for training and 1/3 for testing). I have gained accuracy mostly around 80\% \- 90\% correct predicted class for the gender. I suppose this high accuracy is the result that the dataset is unbalanced. There is total of 55 males and 9 females classifiers. The line chart below shows how the accuracy differ when I have increased k for the following spliting: Train:43 and Test: 20.
+I have used a standart ratio of spliting the data (2/3 for training and 1/3 for testing). I have gained accuracy mostly around 80\% - 90\% correct predicted class for the gender. I suppose this high accuracy is the result that the dataset is unbalanced. There is total of 55 males and 9 females classifiers. The line chart below shows how the accuracy differ when I have increased \textit{k} for the following spliting: Train: 43 and Test: 20.
 
 \begin{figure}[ht]
 \centering
@@ -591,7 +597,7 @@ I have used a standart ratio of spliting the data (2/3 for training and 1/3 for 
 \caption{Classification}
 \end{figure}
 
-Also the accuracy greatly varied accross different distribution of training and testing. The chart below shows different accuracy obtained for different split of data (train&test) and k = 5.
+Also the accuracy greatly varied accross different ratio of training and testing. The chart below shows different accuracy obtained for different split of data (train and test) and \textit{k = 5.}
 
 \begin{figure}[ht]
 \centering
@@ -601,11 +607,11 @@ Also the accuracy greatly varied accross different distribution of training and 
 
 \section{Apriori}
 
-Lastly, for the frequent pattern mining I have used Apriori Algorithm in order to found out which programming languages are most likely group togther within ITU students. \textit{What itemset of programming languages do itu students know?}. 
+Lastly, for the frequent pattern mining I have used Apriori Algorithm in order to found out which programming languages are most likely group together within ITU students. \textit{What itemset of programming languages do itu students know?}. 
 
 \subsection{Results}
 
-The implementation consists of 2 parts, first I have found the all the frequent itemsets which meet the minimum support level \textit{min\_sup=0.2}.
+The implementation consisted of 2 parts, first I have found the all the frequent itemsets which meet the minimum support level \textit{min\_sup=0.2}.
 
 \begin{lstlisting}
 [[({'c#'}),
@@ -642,7 +648,7 @@ The implementation consists of 2 parts, first I have found the all the frequent 
  (({'c++'}), ({'c#', 'java'}), 0.8500000000000001)]
  \end{lstlisting}
  
-The rules above show up in at least 20\% off all the \"transactions\". Therefore 90\% of students who knows python also knows java programming language.
+The rules above show up in at least 20\% off all the transactions. Therefore 90\% of students who knows python also knows java programming language.
 
 %\begin{lstlisting}
 %MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto', beta_1=0.9,
